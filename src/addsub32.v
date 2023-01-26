@@ -1,0 +1,13 @@
+
+module addsub32 (a,b,sub,s, c);                      // 32-bit adder/subtracter
+    input  [31:0] a, b;                           // inputs: a, b
+    input         sub;                            // sub == 1: s = a - b
+                                                  // sub == 0: s = a + b
+    output [31:0] s;                              // output sum s
+	 output c;
+    // sub == 1: a - b = a + (-b) = a + not(b) + 1 = a + (b xor sub) + sub
+    // sub == 0: a + b = a +   b  = a +     b  + 0 = a + (b xor sub) + sub
+    wire   [31:0] b_xor_sub = b ^ {32{sub}};      // (b xor sub)
+    // cla32   (a, b,         ci,  s);
+    cla32 as32 (a, b_xor_sub, sub, s, c);            // b: (b xor sub); ci: sub
+endmodule
